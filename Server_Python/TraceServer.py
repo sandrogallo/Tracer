@@ -10,9 +10,9 @@ XXX To do:
 
 # Belluzzi Python Working Group
 # - Prof. S. Gallo
-# - E. Carrà, Bovinelli, F. Taddia                          
+# - E. Carrà, Bovinelli, F. Taddia, I. Taddia
 
-__version__ = "0.1c"
+__version__ = "0.3"
 
 __all__ = [
     "TraceServer", "TraceRequestHandler"
@@ -41,6 +41,10 @@ DEFAULT_MESSAGE_TEMPLATE = """\
 </html>
 """
 
+SMART_MESSAGE_TEMPLATE = """\
+INVIATO
+"""
+
 
 def _quote_html(html):
     return html.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
@@ -67,13 +71,13 @@ class HandlerDataBase():#classe che gestisce il database nel percorso Path
         f.write(text)
         f.write('\n')
         f.write(lat)
-        f.write('\t')
+        f.write(';')
         f.write(long)
-        f.write('\t')
+        f.write(';')
         f.write(date)
-        f.write('\t')
+        f.write(';')
         f.write(hour)
-        f.write('\t')
+        f.write(';')
         f.write(name)
         f.write('\n')
         f.flush()
@@ -108,7 +112,7 @@ class MyHandler(BaseHTTPRequestHandler):
         self.end_headers()
         print(self.path)
         try:
-            content = ( DEFAULT_MESSAGE_TEMPLATE.format(code=code, message=_quote_html(message), info=_quote_html(info)) )
+            content = ( SMART_MESSAGE_TEMPLATE.format(code=code, message=_quote_html(message), info=_quote_html(info)) )
             self.wfile.write( content.encode('UTF-8', 'replace') )
             self.wfile.flush()
             return True
